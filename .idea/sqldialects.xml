@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/DBConn.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/account.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/categories.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/dashboard.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/edit_product.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/inquiries.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/orders.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/products.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/admin/users.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/cart.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/checkout.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/createTable.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/favorites.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/includes/categories.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/includes/db.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/index.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/login.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/myClothingStore.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/register.php" dialect="GenericSQL" />
+  </component>
+</project>

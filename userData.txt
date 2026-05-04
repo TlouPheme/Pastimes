@@ -1,0 +1,5 @@
+Admin User	admin@pastimes.co.za	$2y$10$c9vB6uscuXWMkgiJTh..M.PUH2WrVUxBqwwHGfhaWbgR1tpV085ia	admin	verified
+John Doe	j.doe@abc.co.za	$2y$10$tx91ya1AZrH59CCmv7UUU.0OzH3jF0xknb3wSEDK1./nwiEFw44Ni	customer	verified
+Lerato Mokoena	lerato@example.co.za	$2y$10$1f4yv/r9QdPCaGo.qfXjwuh.1B7t68L747jfele8O8eZGpxDSwNNa	customer	verified
+Ayesha Khan	ayesha@example.co.za	$2y$10$OjGG6C8vX9bkLp8ve.waJeA9I8hqv9WEG0jbN30hkXpwQFwWhnKSW	customer	pending
+Michael Smith	michael@example.co.za	$2y$10$FbLhoiPwsqrfQ4rHo/bZt.w3gldgat2qPAAW6YlKos3ddr8hZdLQy	customer	pending
