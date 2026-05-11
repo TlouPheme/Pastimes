@@ -12,6 +12,7 @@ $messageType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productId = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT);
 
+    // Cart POST requests only remove a single item for the current user.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -26,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Load the current cart with product details needed for the cart rows.
 $stmt = $conn->prepare('SELECT products.*, categories.name AS category_name
     FROM cart_items
     INNER JOIN products ON products.id = cart_items.product_id
@@ -36,6 +38,7 @@ $stmt->bind_param('i', $user['id']);
 $stmt->execute();
 $cartItems = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $cartTotal = array_sum(array_map(fn ($item) => (float)$item['price'], $cartItems));
+// Sold items may remain visible in the cart, but only available ones can check out.
 $availableItems = array_filter($cartItems, fn ($item) => ($item['status'] ?? 'available') === 'available');
 
 include 'includes/header.php';

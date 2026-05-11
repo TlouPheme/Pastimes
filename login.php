@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $user = $stmt->get_result()->fetch_assoc();
 
+        // Customers must be verified by an admin before they can sign in.
         if ($user && password_verify($password, $user['password'])) {
             if (($user['role'] ?? '') !== 'admin' && ($user['verification_status'] ?? 'pending') !== 'verified') {
                 $message = 'Your account is still waiting for administrator verification.';

@@ -19,6 +19,7 @@ $where = [];
 $params = [];
 $types = '';
 
+// Build the product filters and matching bind types for a prepared statement.
 if ($search !== '') {
     $where[] = '(products.name LIKE ? OR products.description LIKE ?)';
     $term = '%' . $search . '%';
@@ -58,6 +59,7 @@ $orderBy = match ($sort) {
     default => 'products.created_at DESC',
 };
 
+// Count the filtered results first so pagination can clamp out-of-range pages.
 $countSql = 'SELECT COUNT(*) AS total
     FROM products
     LEFT JOIN categories ON categories.id = products.category_id';
@@ -85,6 +87,7 @@ $sql = 'SELECT products.*, categories.name AS category_name
     FROM products
     LEFT JOIN categories ON categories.id = products.category_id';
 
+// Reuse the same filters for the paginated product query.
 if ($where) {
     $sql .= ' WHERE ' . implode(' AND ', $where);
 }

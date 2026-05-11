@@ -3,6 +3,7 @@ function save_product_image(array $file, string $targetDirectory, ?string &$erro
 {
     $error = null;
 
+    // Empty file inputs are optional, so return without treating them as errors.
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
         return '';
     }
@@ -17,6 +18,7 @@ function save_product_image(array $file, string $targetDirectory, ?string &$erro
         return '';
     }
 
+    // Validate the image by reading its real image type instead of trusting the extension.
     $imageInfo = getimagesize($file['tmp_name']);
     $allowedTypes = [
         IMAGETYPE_JPEG => 'jpg',
@@ -34,6 +36,7 @@ function save_product_image(array $file, string $targetDirectory, ?string &$erro
         mkdir($targetDirectory, 0775, true);
     }
 
+    // Build a filesystem-safe name while keeping enough of the original name readable.
     $originalName = basename($file['name']);
     $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '-', pathinfo($originalName, PATHINFO_FILENAME));
     $safeName = trim($safeName, '-') ?: 'product';
@@ -69,6 +72,7 @@ function save_product_images(array $files, string $targetDirectory, ?string &$er
         $image = save_product_image($file, $targetDirectory, $error);
 
         if ($error) {
+            // If one gallery upload fails, remove any files already saved for this batch.
             foreach ($savedImages as $savedImage) {
                 $savedPath = rtrim($targetDirectory, '/\\') . DIRECTORY_SEPARATOR . $savedImage;
 

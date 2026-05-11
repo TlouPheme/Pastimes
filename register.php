@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageType = 'error';
         } else {
             $result = $conn->query('SELECT COUNT(*) AS total FROM users');
+            // The first registered account becomes the initial verified administrator.
             $userCount = (int)(($result ? $result->fetch_assoc() : ['total' => 0])['total'] ?? 0);
             $role = $userCount === 0 ? 'admin' : 'customer';
             $verificationStatus = $role === 'admin' ? 'verified' : 'pending';

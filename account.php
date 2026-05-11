@@ -12,6 +12,7 @@ $messageType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'profile';
 
+    // The account page handles profile updates and password changes from separate forms.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -70,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Collect account summary data shown below the profile forms.
 $stmt = $conn->prepare('SELECT COUNT(*) AS total FROM favorites WHERE user_id = ?');
 $stmt->bind_param('i', $user['id']);
 $stmt->execute();

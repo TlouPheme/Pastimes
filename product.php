@@ -18,6 +18,7 @@ $isFavorite = false;
 $isInCart = false;
 
 if ($id) {
+    // Load the product with its category label for the detail view.
     $stmt = $conn->prepare('SELECT products.*, categories.name AS category_name
         FROM products
         LEFT JOIN categories ON categories.id = products.category_id
@@ -31,6 +32,7 @@ if ($id) {
 if ($product && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = current_user();
 
+    // One product page handles cart, favorite, and inquiry submissions.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -106,6 +108,7 @@ if ($product && $_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($product && current_user()) {
+    // Preload customer-specific state so the buttons show the right action.
     $userId = (int)current_user()['id'];
     $stmt = $conn->prepare('SELECT id FROM favorites WHERE user_id = ? AND product_id = ? LIMIT 1');
     $stmt->bind_param('ii', $userId, $id);
@@ -121,6 +124,7 @@ if ($product && current_user()) {
 $galleryImages = [];
 
 if ($product) {
+    // The gallery starts with the primary image, then adds any extra product images.
     if (!empty($product['image'])) {
         $galleryImages[] = $product['image'];
     }

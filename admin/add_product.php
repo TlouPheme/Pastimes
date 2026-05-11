@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $featured = isset($_POST['featured']) ? 1 : 0;
     $image = '';
 
+    // Validate product fields before accepting any uploaded image files.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $galleryImages = save_product_images($_FILES['gallery_images'] ?? [], '../assets/images', $galleryError);
 
             if ($galleryError) {
+                // Remove the primary image if gallery upload fails before saving the product.
                 if ($image !== '') {
                     $imagePath = '../assets/images/' . $image;
 
@@ -56,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($stmt->execute()) {
                     $productId = $stmt->insert_id;
 
+                    // Save optional gallery images after the product id is available.
                     foreach ($galleryImages as $galleryImage) {
                         $stmt = $conn->prepare('INSERT INTO product_images (product_id, image) VALUES (?, ?)');
                         $stmt->bind_param('is', $productId, $galleryImage);
@@ -66,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $messageType = 'success';
                     $_POST = [];
                 } else {
+                    // Database save failed, so remove uploaded files to avoid orphaned images.
                     if ($image !== '') {
                         $imagePath = '../assets/images/' . $image;
 

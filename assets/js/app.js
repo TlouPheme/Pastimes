@@ -6,6 +6,7 @@ document.querySelectorAll('[data-image-preview]').forEach((input) => {
     }
 
     input.addEventListener('change', () => {
+        // Refresh the preview every time the selected files change.
         target.innerHTML = '';
 
         Array.from(input.files || []).forEach((file) => {
@@ -14,6 +15,7 @@ document.querySelectorAll('[data-image-preview]').forEach((input) => {
             }
 
             const image = document.createElement('img');
+            // Object URLs allow local previews without uploading the file first.
             image.src = URL.createObjectURL(file);
             image.alt = file.name;
             image.onload = () => URL.revokeObjectURL(image.src);

@@ -14,6 +14,7 @@ $message = '';
 $messageType = '';
 
 if ($id) {
+    // Load the product being edited before rendering or accepting updates.
     $stmt = $conn->prepare('SELECT * FROM products WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
@@ -44,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $featured = isset($_POST['featured']) ? 1 : 0;
     $image = $product['image'] ?? '';
 
+    // This form can either remove one gallery image or update product details.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -91,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $galleryImages = save_product_images($_FILES['gallery_images'] ?? [], '../assets/images', $galleryError);
 
             if ($galleryError) {
+                // If gallery upload fails, remove the newly uploaded replacement image.
                 if ($newImage !== '') {
                     $newImagePath = '../assets/images/' . $newImage;
 
@@ -106,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bind_param('ssdsisii', $name, $desc, $price, $image, $category, $status, $featured, $id);
 
                 if ($stmt->execute()) {
+                    // A successful replacement lets us remove the old primary image.
                     if ($newImage !== '' && !empty($product['image'])) {
                         $oldImagePath = '../assets/images/' . $product['image'];
 
@@ -133,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'featured' => $featured,
                     ];
                 } else {
+                    // Database update failed, so remove newly uploaded files.
                     if ($newImage !== '') {
                         $newImagePath = '../assets/images/' . $newImage;
 

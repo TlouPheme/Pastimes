@@ -12,6 +12,7 @@ $dbUser = 'root';
 $dbPassword = '';
 $dbName = $databaseName ?? 'ClothingStore';
 
+// Create the shared database connection used by every page in the store.
 $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 
 if ($conn->connect_error) {
@@ -19,6 +20,7 @@ if ($conn->connect_error) {
 }
 
 if (!function_exists('column_exists')) {
+    // Used by the lightweight migration checks below before adding new columns.
     function column_exists(mysqli $conn, string $table, string $column): bool
     {
         $stmt = $conn->prepare('
@@ -36,6 +38,7 @@ if (!function_exists('column_exists')) {
     }
 }
 
+// Create the application tables if the database has not been initialized yet.
 $conn->query("
     CREATE TABLE IF NOT EXISTS categories (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,6 +58,7 @@ $conn->query("
     )
 ");
 
+// Keep older local databases compatible with the current user schema.
 if (!column_exists($conn, 'users', 'role')) {
     $conn->query("ALTER TABLE users ADD role ENUM('admin', 'customer') NOT NULL DEFAULT 'admin' AFTER password");
 }
@@ -63,6 +67,7 @@ if (!column_exists($conn, 'users', 'verification_status')) {
     $conn->query("ALTER TABLE users ADD verification_status ENUM('pending', 'verified') NOT NULL DEFAULT 'verified' AFTER role");
 }
 
+// Admin users are trusted immediately so the store can always be managed.
 $conn->query("UPDATE users SET verification_status = 'verified' WHERE role = 'admin'");
 
 $conn->query("
@@ -80,6 +85,7 @@ $conn->query("
     )
 ");
 
+// Keep older product tables compatible with stock status and featured listings.
 if (!column_exists($conn, 'products', 'status')) {
     $conn->query("ALTER TABLE products ADD status ENUM('available', 'sold') NOT NULL DEFAULT 'available' AFTER category_id");
 }

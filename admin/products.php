@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
+    // Admin list actions are limited to stock status changes and product deletion.
     if (!verify_csrf()) {
         $message = 'Security check failed. Please try again.';
         $messageType = 'error';
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageType = 'error';
         }
     } elseif ($action === 'delete' && $id) {
+        // Read image names before deleting the product so orphaned files can be removed.
         $stmt = $conn->prepare('SELECT image FROM products WHERE id = ?');
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -84,6 +86,7 @@ $where = [];
 $params = [];
 $types = '';
 
+// Build optional filters with their matching prepared-statement bind types.
 if ($search !== '') {
     $where[] = '(products.name LIKE ? OR products.description LIKE ?)';
     $term = '%' . $search . '%';
@@ -123,6 +126,7 @@ $orderBy = match ($sort) {
     default => 'products.created_at DESC',
 };
 
+// Count first so the admin list can paginate filtered results correctly.
 $countSql = 'SELECT COUNT(*) AS total
     FROM products
     LEFT JOIN categories ON categories.id = products.category_id';

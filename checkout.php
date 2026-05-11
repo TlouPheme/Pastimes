@@ -9,6 +9,7 @@ $user = current_user();
 $message = '';
 $messageType = '';
 
+// Checkout only includes items that are still available when the page loads.
 $stmt = $conn->prepare('SELECT products.*
     FROM cart_items
     INNER JOIN products ON products.id = cart_items.product_id
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Please enter a delivery address.';
         $messageType = 'error';
     } else {
+        // Keep the order, order items, product status updates, and cart cleanup atomic.
         $conn->begin_transaction();
 
         try {
