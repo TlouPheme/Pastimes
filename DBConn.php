@@ -10,7 +10,7 @@
 $dbHost = 'localhost';
 $dbUser = 'root';
 $dbPassword = '';
-$dbName = $databaseName ?? 'thrift_store';
+$dbName = $databaseName ?? 'ClothingStore';
 
 $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 
